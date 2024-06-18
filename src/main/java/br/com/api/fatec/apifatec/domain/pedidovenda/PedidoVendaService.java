@@ -1,6 +1,7 @@
 package br.com.api.fatec.apifatec.domain.pedidovenda;
 
 import br.com.api.fatec.apifatec.domain.cliente.ClienteService;
+import br.com.api.fatec.apifatec.domain.pedidovenda.dtos.ValorTotalPorProdutoDTO;
 import br.com.api.fatec.apifatec.domain.produto.ProdutoService;
 import br.com.api.fatec.apifatec.entities.Cliente;
 import br.com.api.fatec.apifatec.entities.PedidoVenda;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PedidoVendaService {
@@ -101,6 +103,15 @@ public class PedidoVendaService {
             pedido.setStatus(novoStatus);
             pedidoVendaRepository.save(pedido);
         });
+    }
+
+    @Transactional(readOnly = true)
+    public List<ValorTotalPorProdutoDTO> calcularValorTotalPorProduto() {
+        List<Object[]> resultados = pedidoVendaRepository.calcularValorTotalPorProduto();
+
+        return resultados.stream()
+                .map(result -> new ValorTotalPorProdutoDTO((Long) result[0], (BigDecimal) result[1]))
+                .collect(Collectors.toList());
     }
 
     @Transactional
