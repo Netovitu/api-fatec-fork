@@ -1,6 +1,7 @@
 package br.com.api.fatec.apifatec.controllers;
 
 import br.com.api.fatec.apifatec.domain.pedidovenda.PedidoVendaService;
+import br.com.api.fatec.apifatec.domain.pedidovenda.dtos.ValorTotalPorProdutoDTO;
 import br.com.api.fatec.apifatec.entities.PedidoVenda;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +54,11 @@ public class PedidoVendaControllerV2 {
 		} catch (RuntimeException ex) {
 			return ResponseEntity.notFound().build();
 		}
+	}
+
+	@GetMapping("/pedidos/total-valor-por-produto")
+	public List<ValorTotalPorProdutoDTO> calcularValorTotalPorProduto() {
+		return pedidoVendaService.calcularValorTotalPorProduto();
 	}
 
 	// Cancelar um pedido
